@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
    ssl: {
-     ca: fs.readFileSync(path.join(__dirname, 'certs/ca.pem')),
+     ca: fs.readFileSync(path.join(__dirname, '/ca.pem')),
     rejectUnauthorized: false // or false for testing, but true is safer
   }
 });
