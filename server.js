@@ -9,6 +9,9 @@ const PORT = 3000;
 const multer = require('multer');
 const path = require('path');
 
+app.get('/', (req, res) => {
+  res.send('Backend is up and running!');
+});
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
