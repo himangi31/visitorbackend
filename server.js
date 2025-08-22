@@ -7,8 +7,8 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-//const multer = require('multer');
-//const path = require('path');
+const multer = require('multer');
+const path = require('path');
 
 app.get('/', (req, res) => {
   res.send('Backend is up and running!');
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/visitors', visitorRoutes);
-//app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 
 ///////////////////////////multer/////////////////////////////////////////////////
 
