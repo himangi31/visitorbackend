@@ -4,41 +4,46 @@ const db = require('../db');
 const upload = require('../multer');
 
 
-router.post('/userlogin', (req, res) => {
-  console.log('📊 /userlogin route hit');
- console.log('📦 Request body:', req.body);
 
+router.post('/userlogin', (req, res) => {
   const { email, password } = req.body;
 
-  // Validate input
   if (!email || !password) {
-    return res.status(400).json({ success: false, message: 'Email and password are required' });
+    return res.status(400).json({
+      success: false,
+      message: 'Email and password are required',
+    });
   }
 
-  // Email-only login
   db.query(
     'SELECT * FROM userlogin WHERE email = ?',
     [email],
     (err, result) => {
       if (err) {
-        console.log('❌ SELECT error:', err);
-        return res.status(500).json({ success: false, message: 'Database error' });
+        return res.status(500).json({
+          success: false,
+          message: 'Database error',
+        });
       }
 
-      if (result.length === 0) {
-        return res.status(401).json({ success: false, message: 'Invalid email or password' });
+      if (result.length === 0 || result[0].password !== password) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid email or password',
+        });
       }
 
+      // Login success
       const user = result[0];
-
-      if (user.password !== password) {
-        return res.status(401).json({ success: false, message: 'Invalid email or password' });
-      }
-
-      res.json({ success: true, message: 'Login successful', user });
+      res.json({
+        success: true,
+        message: 'Login successful',
+        user,
+      });
     }
   );
 });
+
 
 
 
