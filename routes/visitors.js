@@ -6,6 +6,7 @@ const upload = require('../multer');
 
 router.post('/userlogin', (req, res) => {
   console.log('📊 /userlogin route hit');
+ console.log('📦 Request body:', req.body);
 
   const { email, password } = req.body;
 
