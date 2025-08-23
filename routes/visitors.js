@@ -3,37 +3,44 @@ const router = express.Router();
 const db = require('../db');
 const upload = require('../multer');
 
+
 router.post('/userlogin', (req, res) => {
   console.log('📊 /userlogin route hit');
-  const { emailOrPhone, password } = req.body;
 
-  if (!emailOrPhone || !password) {
-    return res.status(400).json({ success: false, message: 'Email/Phone and password are required' });
+  const { email, password } = req.body;
+
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Email and password are required' });
   }
 
-  // check with email or phone
+  // Email-only login
   db.query(
-    'SELECT * FROM userlogin WHERE email = ? ',
-    [emailOrPhone, emailOrPhone],
+    'SELECT * FROM userlogin WHERE email = ?',
+    [email],
     (err, result) => {
       if (err) {
         console.log('❌ SELECT error:', err);
-        return res.status(500).json({ error: 'DB error' });
+        return res.status(500).json({ success: false, message: 'Database error' });
       }
 
       if (result.length === 0) {
-        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        return res.status(401).json({ success: false, message: 'Invalid email or password' });
       }
 
       const user = result[0];
+
       if (user.password !== password) {
-        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        return res.status(401).json({ success: false, message: 'Invalid email or password' });
       }
 
       res.json({ success: true, message: 'Login successful', user });
     }
   );
 });
+
+
+
 
 router.post('/usersignup', (req, res) => {
   console.log('📊 /usersignup route hit');
